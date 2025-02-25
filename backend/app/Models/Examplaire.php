@@ -21,7 +21,7 @@ class Examplaire extends Model
 
     public function borrowings()
     {
-        return $this->hasMany(Borrowing::class);
+        return $this->hasMany(BorrowRecord::class);
     }
 
     public function reservations()

@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
-
 use Illuminate\Http\Request;
+use App\Models\Book;
+use finfo;
 
-class AuthorController extends Controller
+class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        return Author::all();
+        return response()->json(Book::all());
     }
 
     /**
@@ -23,15 +22,17 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'name' => 'required|string',
-            'piography' => 'required|string',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'id_author' => 'required',
+            'id_category' => 'required',
         ]);
 
-        $author = Author::create($validate);
+        $book = Book::create($validate);
 
         return response()->json([
-            'message' => 'Author created successfully',
-            'author' => $author
+            'message' => 'Book created successfully',
+            'book' => $book
         ]);
     }
 
@@ -40,8 +41,8 @@ class AuthorController extends Controller
      */
     public function show(string $id)
     {
-        $author = Author::find($id);
-        return response()->json($author);
+        $book = Book::find($id);
+        return response()->json($book);
     }
 
     /**
@@ -49,11 +50,10 @@ class AuthorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $author = Author::find($id);
-        $author->update($request->all());
+        $book = Book::find($id);
+        $book->update($request->all());
 
-        return response()->json($author);
-
+        return response()->json($book);
     }
 
     /**
@@ -61,11 +61,11 @@ class AuthorController extends Controller
      */
     public function destroy(string $id)
     {
-        $author = Author::find($id);
-        $author->delete();
+        $book = Book::find($id);
+        $book->delete();
 
         return response()->json([
-            'message' => 'Author deleted successfully'
-        ], 204);
+            'message' => 'Book deleted successfully'
+        ]);
     }
 }

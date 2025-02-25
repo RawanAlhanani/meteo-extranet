@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
-
 use Illuminate\Http\Request;
+use App\Models\Examplaire;
 
-class AuthorController extends Controller
+class ExamplaireController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        return Author::all();
+        return response()->json(Examplaire::all());
     }
 
     /**
@@ -23,15 +21,15 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'name' => 'required|string',
-            'piography' => 'required|string',
+            'id_book' => 'required',
+            'quantity' => 'required',
         ]);
 
-        $author = Author::create($validate);
+        $examplaire = Examplaire::create($validate);
 
         return response()->json([
-            'message' => 'Author created successfully',
-            'author' => $author
+            'message' => 'Examplaire created successfully',
+            'examplaire' => $examplaire
         ]);
     }
 
@@ -40,8 +38,11 @@ class AuthorController extends Controller
      */
     public function show(string $id)
     {
-        $author = Author::find($id);
-        return response()->json($author);
+        $examplaire = Examplaire::find($id);
+
+
+
+        return response()->json($examplaire);
     }
 
     /**
@@ -49,11 +50,10 @@ class AuthorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $author = Author::find($id);
-        $author->update($request->all());
+        $examplaire = Examplaire::find($id);
+        $examplaire->update($request->all());
 
-        return response()->json($author);
-
+        return response()->json($examplaire);
     }
 
     /**
@@ -61,11 +61,11 @@ class AuthorController extends Controller
      */
     public function destroy(string $id)
     {
-        $author = Author::find($id);
-        $author->delete();
+        $examplaire = Examplaire::find($id);
+        $examplaire->delete();
 
         return response()->json([
-            'message' => 'Author deleted successfully'
-        ], 204);
+            'message' => 'Examplaire deleted successfully'
+        ]);
     }
 }
