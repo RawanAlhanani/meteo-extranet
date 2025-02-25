@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LibrarianController;
+use App\Http\Controllers\AuthorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']) ->name('login');
 
-Route::get('/test', [AuthController::class, 'index']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -37,5 +37,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Librarian-only routes
     Route::middleware('librarian')->group(function () {
         Route::get('/librarian/dashboard', [LibrarianController::class, 'dashboard']);
+
     });
+
+    // Common routes
+    Route::get('/authors', [AuthorController::class, 'index']);
+    Route::get('/authors/{id}', [AuthorController::class, 'show']);
+    Route::post('/authors/create', [AuthorController::class, 'store']);
+    Route::put('/authors/{id}', [AuthorController::class, 'update']);
+    Route::delete('/authors/{id}', [AuthorController::class, 'destroy']);
+
 });
