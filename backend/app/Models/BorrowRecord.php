@@ -10,28 +10,57 @@ class BorrowRecord extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_user',
-        'id_examplaire',
-        'id_reservation',
+        'id',
+        'user_id',
+        'book_id',
+        'reservation_id',
         'borrow_date',
         'return_date',
         'due_date',
+
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function examplaire()
+    public function book()
     {
-        return $this->belongsTo(Examplaire::class, 'id_examplaire');
+        return $this->belongsTo(Book::class, 'book_id');
     }
 
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class, 'id_reservation');
+        return $this->belongsTo(Reservation::class, 'reservation_id');
     }
 
-   
+    public function getStatusAttribute()
+    {
+        if ($this->return_date) {
+            return 'retourn ';
+        } elseif (now()->gt($this->due_date)) {
+            return 'en retard';
+        } else {
+            return 'encours';
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

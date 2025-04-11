@@ -5,29 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
-        return Author::all();
+        return response()->json(Author::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        $validate = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'piography' => 'required|string',
         ]);
 
-        $author = Author::create($validate);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 400);
+        }
+
+        $author = Author::create($request->all());
 
         return response()->json([
             'message' => 'Author created successfully',
@@ -35,37 +35,43 @@ class AuthorController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Author $author)
     {
-        $author = Author::find($id);
+        if (!$author){
+           return response()->json(['message' => 'Category not found'], 404);
+
+        }
         return response()->json($author);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, Author $author)
     {
-        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'piography' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 400);
+        }
         $author->update($request->all());
 
         return response()->json($author);
 
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Author $author)
     {
-        $author = Author::find($id);
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
         $author->delete();
-
-        return response()->json([
-            'message' => 'Author deleted successfully'
-        ], 204);
+        return response()->json(['message' => 'Author deleted successfully']);
     }
 }
+
+

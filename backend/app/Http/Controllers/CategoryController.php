@@ -4,28 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Can;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         return response()->json(Category::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        $validate = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'description' => 'required|string',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        $category = Category::create($validate);
+        $category = Category::create($request->all());
 
         return response()->json([
             'message' => 'Category created successfully',
@@ -33,12 +35,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+   
+    public function show(Category $category)
     {
-        $category = Category::find($id);
 
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);
@@ -47,23 +46,37 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    
+    public function update(Request $request,Category $category)
     {
-        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'description' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $category->update($request->all());
 
-        return response()->json($category);
+        return response()->json([
+            'message' => 'Category updated successfully',
+            'category' => $category
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+  
+    public function destroy(Category $category)
     {
-        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
         $category->delete();
 
         return response()->json([

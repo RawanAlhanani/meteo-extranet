@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->unsignedBigInteger('id_category');
-            $table->unsignedBigInteger('id_author');
+            $table->string('image')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('authors')->onDelete('cascade');
+            $table->integer('quantity')->default(1);
             $table->boolean('disponibility')->default(true);
             $table->timestamps();
-
-            $table->foreign('id_category')->references('id')->on('categories');
-            $table->foreign('id_author')->references('id')->on('authors');
         });
     }
 

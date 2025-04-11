@@ -12,9 +12,11 @@ class Book extends Model
     protected $fillable = [
         'title',
         'description',
-        'id_author',
-        'id_category',
+        'author_id',
+        'category_id',
         'quantity',
+        'disponibility',
+        'image',
     ];
 
     public function author()
@@ -27,10 +29,30 @@ class Book extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function examplaires()
+    public function borrowRecords()
     {
-        return $this->hasMany(Examplaire::class);
+        return $this->hasMany(BorrowRecord::class);
+    }
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 
-    
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+    public function getAvailableCopiesAttribute()
+    {
+        return $this->quantity - $this->borrowRecords()->whereNull('return_date')->count();
+    }
+    public function isAvailable()
+    {
+        return $this->getAvailableCopiesAttribute() > 0;
+    }
+
+
+
+
+
 }

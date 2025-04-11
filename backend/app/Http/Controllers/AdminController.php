@@ -8,12 +8,16 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return response()->json([
-            'message' => 'Admin Dashboard Data',
-            'stats' => [
-                'users' => 100,
-                'books' => 500
-            ]
-        ]);
+        if (auth()->user() && auth()->user()->role === 'admin') {
+            return response()->json([
+                'message' => 'Welcome to the admin dashboard',
+                'user' => auth()->user()
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+            }
+        }
     }
-}
+

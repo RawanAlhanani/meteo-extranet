@@ -6,20 +6,13 @@ use App\Http\Controllers\LibrarianController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\ExamplaireController;
+use App\Http\Controllers\BorrowRecordController;
+use App\Http\Controllers\ReservationController;
+
 use Illuminate\Support\Facades\Route;
 
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -45,32 +38,53 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 // Common routes
+Route::prefix('/authors', 'authors')->controller(AuthorController::class)->name('author') ->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{author}', 'show')->whereNumber('id');
+    Route::post('/create', 'store');
+    Route::put('/{author}', 'update')->whereNumber('id');
+    Route::delete('/{author}', 'destroy')->whereNumber('id');
+});
 
-Route::get('/authors', [AuthorController::class, 'index']);
-Route::get('/authors/{id}', [AuthorController::class, 'show']);
-Route::post('/authors/create', [AuthorController::class, 'store']);
-Route::put('/authors/{id}', [AuthorController::class, 'update']);
-Route::delete('/authors/{id}', [AuthorController::class, 'destroy']);
+Route::prefix('/categories', 'categories')->controller(CategoryController::class)->name('category') ->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{category}', 'show') ->whereNumber('id');
+    Route::post('/create', 'store');
+    Route::put('/{category}', 'update')->whereNumber('id');
+    Route::delete('/{category}', 'destroy')->whereNumber('id');
+});
+Route::prefix('/books', 'books')->controller(BookController::class)->name('book') ->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{book}', 'show') ->whereNumber('id');
+    Route::post('/create', 'store');
+    Route::put('/{book}', 'update') ->whereNumber('id');
+    Route::delete('/{book}', 'destroy')->whereNumber('id');
+});
+
+Route::prefix('/reservations')->controller(ReservationController::class)->name('reservation')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{reservation}', 'show') ->whereNumber('id');
+    Route::post('/create', 'store');
+    Route::put('/{reservation}', 'update') ->whereNumber('id');
+    Route::delete('/{reservation}', 'destroy')->whereNumber('id')  ;
+});
+
+Route::prefix('/borrow', 'borrow')->controller(BorrowRecordController::class)->name('examplaire') ->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{borrow}', 'show')->whereNumber('id');
+    Route::post('/create', 'store');
+    Route::put('/{borrow}', 'update')->whereNumber('id');
+    Route::delete('/{borrow}', 'destroy')->whereNumber('id');
+});
 
 
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-Route::post('/categories/create', [CategoryController::class, 'store']);
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
 
-Route::get('/books', [BookController::class, 'index']);
-Route::get('/books/{id}', [BookController::class, 'show']);
-Route::post('/books/create', [BookController::class, 'store']);
-Route::put('/books/{id}', [BookController::class, 'update']);
-Route::delete('/books/{id}', [BookController::class, 'destroy']);
 
 
-Route::get('/exemplaires', [ExamplaireController::class, 'index']);
-Route::get('/exemplaires/{id}', [ExamplaireController::class, 'show']);
-Route::post('/exemplaires/create', [ExamplaireController::class, 'store']);
-Route::put('/exemplaires/{id}', [ExamplaireController::class, 'update']);
-Route::delete('/exemplaires/{id}', [ExamplaireController::class, 'destroy']);
+
+
+
+
 
