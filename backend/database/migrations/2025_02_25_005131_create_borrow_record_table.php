@@ -13,17 +13,12 @@ return new class extends Migration
     {
         Schema::create('borrow_record', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_examplaire');
-            $table->unsignedBigInteger('id_reservation')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
+            $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade') ->nullable();
             $table->date('borrow_date');
             $table->date('return_date')->nullable();
             $table->date('due_date');
-
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id_examplaire')->references('id')->on('examplaires')->onDelete('cascade');
-            $table->foreign('id_reservation')->references('id')->on('reservations')->onDelete('set null');
-
             $table->timestamps();
         });
     }

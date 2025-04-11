@@ -2,33 +2,36 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Book;
-use finfo;
+use Illuminate\Support\Facades\Validator;
+
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return response()->json(Book::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        $validate = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
             'id_author' => 'required',
             'id_category' => 'required',
         ]);
 
-        $book = Book::create($validate);
+
+        if ($validator->fails()) {
+           return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $book = Book::create($request->all());
 
         return response()->json([
             'message' => 'Book created successfully',
@@ -39,29 +42,45 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        $book = Book::find($id);
+        if (!$book){
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+
         return response()->json($book);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
-        $book = Book::find($id);
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'id_author' => 'required',
+            'id_category' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if (!$book) {
+            return redirect()->back()->withErrors(['error' => 'Book not found'])->withInput();
+        }
         $book->update($request->all());
 
         return response()->json($book);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(Book $book)
     {
-        $book = Book::find($id);
+
+        if (!$book) {
+            return redirect()->back()->withErrors(['error' => 'Book not found'])->withInput();
+        }
         $book->delete();
 
         return response()->json([
