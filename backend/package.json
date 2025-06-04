@@ -1,5 +1,6 @@
 {
     "private": true,
+<<<<<<< HEAD
     "type": "module",
     "scripts": {
         "build": "vite build",
@@ -60,5 +61,15 @@
         "@rollup/rollup-linux-x64-gnu": "4.9.5",
         "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
         "lightningcss-linux-x64-gnu": "^1.29.1"
+=======
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "axios": "^1.1.2",
+        "laravel-vite-plugin": "^0.7.2",
+        "vite": "^4.0.0"
+>>>>>>> 4d5adbcd7abac5b4ddd7716a201e1e65d62eee9f
     }
 }

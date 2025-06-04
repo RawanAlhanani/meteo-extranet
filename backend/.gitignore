@@ -1,15 +1,22 @@
 /.phpunit.cache
+<<<<<<< HEAD
 /bootstrap/ssr
+=======
+>>>>>>> 4d5adbcd7abac5b4ddd7716a201e1e65d62eee9f
 /node_modules
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
+<<<<<<< HEAD
 /storage/pail
+=======
+>>>>>>> 4d5adbcd7abac5b4ddd7716a201e1e65d62eee9f
 /vendor
 .env
 .env.backup
 .env.production
+<<<<<<< HEAD
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -22,3 +29,13 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+=======
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+>>>>>>> 4d5adbcd7abac5b4ddd7716a201e1e65d62eee9f

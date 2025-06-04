@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -15,6 +16,7 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         User::create([
+
             'nom' => 'Test User',
             'email' => 'test@example.com',
             'mot_de_passe' => Hash::make('password123'),
@@ -29,6 +31,8 @@ class UsersTableSeeder extends Seeder
             'mot_de_passe' => Hash::make('password456'),
             'role' => 'user',
             'date_inscription' => now(),
+
+
         ]);
     }
 }
